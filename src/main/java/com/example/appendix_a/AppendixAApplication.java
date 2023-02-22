@@ -10,7 +10,7 @@ public class AppendixAApplication {
 
         SpringApplication.run(AppendixAApplication.class, args);
         ChinookDAO chinookDAO = new ChinookDAO();
-        chinookDAO.test();
+        chinookDAO.getAllCustomers();
         }
 
 }

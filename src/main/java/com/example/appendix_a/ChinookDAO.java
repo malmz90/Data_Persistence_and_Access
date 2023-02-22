@@ -1,8 +1,8 @@
 package com.example.appendix_a;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChinookDAO
    {
@@ -20,9 +20,39 @@ public class ChinookDAO
             this.password = password;
         }
 
-       public void test() {
-           try(Connection conn = DriverManager.getConnection(url, username,password);) {
-               System.out.println("Connected to Postgres...");
+       public record Customer(int id,
+                               String firstName,
+                               String lastName,
+                               String country,
+                               String postalCode,
+                               String phoneNumber,
+                               String email )
+       {
+       }
+
+
+       public void getAllCustomers() {
+           String sql = "SELECT * FROM customer";
+           try(Connection conn = DriverManager.getConnection(url, username,password)) {
+
+               PreparedStatement statement = conn.prepareStatement(sql);
+
+               ResultSet result = statement.executeQuery();
+               List<Customer> customers = new ArrayList<>();
+               while(result.next()){
+                Customer customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_Code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+                customers.add(customer);
+               }
+
+               System.out.println(customers);
            } catch (SQLException e) {
                e.printStackTrace();
            }
