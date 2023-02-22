@@ -80,6 +80,33 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public ChinookDAO.Customer findByName(String name) {
+        String sql = "SELECT * FROM customer WHERE first_name LIKE ? OR last_name LIKE ? ";
+        ChinookDAO.Customer customer = null;
+        try(Connection conn = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2,name);
+            ResultSet result = statement.executeQuery();
+            if(result.next()){
+                customer = new ChinookDAO.Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_Code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+            }
+            System.out.println(customer);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    @Override
     public int insert(ChinookDAO.Customer object) {
         return 0;
     }
