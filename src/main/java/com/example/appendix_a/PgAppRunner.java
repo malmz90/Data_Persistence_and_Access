@@ -1,5 +1,6 @@
 package com.example.appendix_a;
 
+import com.example.appendix_a.Models.Customer;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,8 @@ public class PgAppRunner implements ApplicationRunner {
        //System.out.println(customerRepository.findByName("Leonie"));
         //System.out.println(customerRepository.mostPopularCountry());
        // System.out.println(customerRepository.getCustomerPage(3,3));
-        System.out.println(customerRepository.customerWithHighestInvoice());
+        //System.out.println(customerRepository.customerWithHighestInvoice());
+        System.out.println(customerRepository.customerPopularGenre(customerRepository.findById(4)));
 
     }
 }

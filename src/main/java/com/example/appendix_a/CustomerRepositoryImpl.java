@@ -2,6 +2,7 @@ package com.example.appendix_a;
 
 import com.example.appendix_a.Models.Customer;
 import com.example.appendix_a.Models.CustomerCountry;
+import com.example.appendix_a.Models.CustomerGenre;
 import com.example.appendix_a.Models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -75,7 +76,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                         result.getString("email")
                 );
             }
-            System.out.println(customer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,7 +102,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                         result.getString("email")
                 );
             }
-            System.out.println(customer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -233,6 +232,28 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
         return customerSpender;
     }
+
+    @Override
+    public CustomerGenre customerPopularGenre(Customer object) {
+        String sql = "SELECT first_Name FROM customer INNER JOIN invoice ON customer.customer_id = invoice.customer_ID";
+        ;
+        CustomerGenre genre=null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            if(result.next()) {
+                genre = new CustomerGenre(
+                        result.getString("first_Name")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return genre;
+    }
+
     @Override
     public int delete(Customer object) {
         return 0;
