@@ -2,6 +2,7 @@ package com.example.appendix_a;
 
 import com.example.appendix_a.Models.Customer;
 import com.example.appendix_a.Models.CustomerCountry;
+import com.example.appendix_a.Models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -214,6 +215,24 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return updatedCustomer;
     }
 
+    @Override
+    public CustomerSpender customerWithHighestInvoice() {
+        String sql = "SELECT customer_id FROM invoice GROUP BY customer_id  ORDER BY SUM(total) DESC LIMIT 1; ";
+        CustomerSpender customerSpender= null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            if(result.next()){
+                int id = result.getInt("customer_id");
+                customerSpender = new CustomerSpender(findById(id));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerSpender;
+    }
     @Override
     public int delete(Customer object) {
         return 0;
