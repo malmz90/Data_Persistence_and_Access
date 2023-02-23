@@ -129,6 +129,26 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public ChinookDAO.Customer getCustomerWithHighestInvoice() {
+        String sql = "SELECT customer_id FROM invoice GROUP BY customer_id  ORDER BY SUM(total) DESC LIMIT 1; ";
+        int id=0;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            if(result.next()){
+                id=result.getInt("customer_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return findById(id);
+    }
+
+
+
+    @Override
     public int update(ChinookDAO.Customer object) {
         return 0;
     }
