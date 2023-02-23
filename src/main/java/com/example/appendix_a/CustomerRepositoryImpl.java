@@ -107,6 +107,25 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public String getPopularCountry() {
+        String sql = "SELECT country FROM customer GROUP BY country ORDER BY country DESC LIMIT 1";
+        String country = "";
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            if(result.next()) {
+                country = result.getString("country");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return country;
+    }
+
+
+    @Override
     public List<ChinookDAO.Customer> getCustomerPage(int lim, int offs) {
         String sql = "SELECT * FROM customer ORDER BY customer_id LIMIT ? OFFSET ?";
         List<ChinookDAO.Customer> customers = new ArrayList<>();
@@ -134,7 +153,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
         return customers;
     }
-
 
     @Override
     public ChinookDAO.Customer addCustomer(ChinookDAO.Customer object) {

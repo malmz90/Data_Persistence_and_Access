@@ -7,7 +7,7 @@ public interface CRUDRepository<T, U> {
     T findById(U id);
 
     T findByName(String name);
-
+    String getPopularCountry();
     List <T> getCustomerPage (int lim, int offs);
     T addCustomer(T object);
     T updateCustomer(T object);
