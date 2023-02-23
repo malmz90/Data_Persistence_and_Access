@@ -5,8 +5,9 @@ import java.util.List;
 public interface CRUDRepository<T, U> {
     List<T> findAll();
     T findById(U id);
-
     T findByName(String name);
+
+    String getPopularCountry();
     int insert(T object);
     int update(T object);
     int delete(T object);
