@@ -9,8 +9,8 @@ public interface CRUDRepository<T, U> {
     T findByName(String name);
 
     List <T> getCustomerPage (int lim, int offs);
-    int addCustomer(T object);
-    int updateCustomer(T object);
+    T addCustomer(T object);
+    T updateCustomer(T object);
     int delete(T object);
     int deleteById(U id);
 }
