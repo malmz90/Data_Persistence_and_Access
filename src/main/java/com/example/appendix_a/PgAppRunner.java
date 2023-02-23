@@ -15,9 +15,12 @@ public class PgAppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-      //  System.out.println(customerRepository.findAll());
+        //System.out.println(customerRepository.findAll());
         //System.out.println("test " + customerRepository.findById(2));
-        System.out.println(customerRepository.findByName("Leo"));
+       //System.out.println(customerRepository.findByName("Leonie"));
+        System.out.println(customerRepository.mostPopularCountry());
+       // System.out.println(customerRepository.getCustomerPage(3,3));
+
     }
 }
 

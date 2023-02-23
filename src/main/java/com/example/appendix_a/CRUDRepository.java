@@ -1,5 +1,7 @@
 package com.example.appendix_a;
 
+import com.example.appendix_a.Models.CustomerCountry;
+
 import java.util.List;
 
 public interface CRUDRepository<T, U> {
@@ -7,7 +9,7 @@ public interface CRUDRepository<T, U> {
     T findById(U id);
 
     T findByName(String name);
-    String getPopularCountry();
+    CustomerCountry mostPopularCountry();
     List <T> getCustomerPage (int lim, int offs);
     T addCustomer(T object);
     T updateCustomer(T object);

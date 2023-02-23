@@ -1,4 +1,6 @@
 package com.example.appendix_a;
 
-public interface CustomerRepository extends CRUDRepository<ChinookDAO.Customer,Integer>{
+import com.example.appendix_a.Models.Customer;
+
+public interface CustomerRepository extends CRUDRepository<Customer,Integer>{
 }
