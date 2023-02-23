@@ -1,9 +1,10 @@
 package com.example.appendix_a;
 
+import com.example.appendix_a.Models.Customer;
+import com.example.appendix_a.Models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<ChinookDAO.Customer> findAll() {
+    public List<Customer> findAll() {
         String sql = "SELECT * FROM customer";
-        List<ChinookDAO.Customer> customers = new ArrayList<>();
+        List<Customer> customers = new ArrayList<>();
         try(Connection conn = DriverManager.getConnection(url, username,password)) {
 
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -35,7 +36,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             ResultSet result = statement.executeQuery();
 
             while(result.next()){
-                ChinookDAO.Customer customer = new ChinookDAO.Customer(
+                Customer customer = new Customer(
                         result.getInt("customer_id"),
                         result.getString("first_name"),
                         result.getString("last_name"),
@@ -54,15 +55,15 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     };
 
     @Override
-    public ChinookDAO.Customer findById(Integer id) {
+    public Customer findById(Integer id) {
         String sql = "SELECT * FROM customer WHERE customer_id = ?";
-        ChinookDAO.Customer customer = null;
+        Customer customer = null;
         try(Connection conn = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet result = statement.executeQuery();
             if(result.next()){
-                customer = new ChinookDAO.Customer(
+                customer = new Customer(
                         result.getInt("customer_id"),
                         result.getString("first_name"),
                         result.getString("last_name"),
@@ -80,16 +81,16 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public ChinookDAO.Customer findByName(String name) {
+    public Customer findByName(String name) {
         String sql = "SELECT * FROM customer WHERE first_name LIKE ? OR last_name LIKE ? ";
-        ChinookDAO.Customer customer = null;
+        Customer customer = null;
         try(Connection conn = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, name);
             statement.setString(2,name);
             ResultSet result = statement.executeQuery();
             if(result.next()){
-                customer = new ChinookDAO.Customer(
+                customer = new Customer(
                         result.getInt("customer_id"),
                         result.getString("first_name"),
                         result.getString("last_name"),
@@ -107,7 +108,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public int addCustomer(ChinookDAO.Customer object) {
+    public int addCustomer(Customer object) {
         String sql = "INSERT INTO customer (\"first_name\",\"last_name\",\"country\",\"postal_code\",\"phone\",\"email\") VALUES(?,?,?,?,?,?)";
         int numRowsAffected = 0;
 
@@ -129,32 +130,34 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public ChinookDAO.Customer getCustomerWithHighestInvoice() {
+    public CustomerSpender getCustomerWithHighestInvoice() {
         String sql = "SELECT customer_id FROM invoice GROUP BY customer_id  ORDER BY SUM(total) DESC LIMIT 1; ";
-        int id=0;
+        CustomerSpender customerSpender= null;
         try(Connection conn = DriverManager.getConnection(url, username,password)) {
             // Write statement
             PreparedStatement statement = conn.prepareStatement(sql);
             // Execute statement
             ResultSet result = statement.executeQuery();
             if(result.next()){
-                id=result.getInt("customer_id");
+                customerSpender= new CustomerSpender(
+                result.getString("customer_id")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return findById(id);
+        return customerSpender;
     }
 
 
 
     @Override
-    public int update(ChinookDAO.Customer object) {
+    public int update(Customer object) {
         return 0;
     }
 
     @Override
-    public int delete(ChinookDAO.Customer object) {
+    public int delete(Customer object) {
         return 0;
     }
 
