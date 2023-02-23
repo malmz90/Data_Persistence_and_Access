@@ -107,34 +107,25 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public ChinookDAO.Customer addCustomer(ChinookDAO.Customer object) {
-        String sql = "INSERT INTO customer ('first_name','last_name','country','postal_code','phone','email') VALUES(?,?,?,?,?,?)";
-        ChinookDAO.Customer customer = null;
-        try(Connection conn = DriverManager.getConnection(url, username, password)) {
-            PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1,object.firstName());
-            statement.setString(2,object.lastName());
-            statement.setString(3,object.country());
-            statement.setString(4,object.postalCode());
-            statement.setString(5,object.phoneNumber());
-            statement.setString(6,object.email());
-            ResultSet result = statement.executeQuery();
-            if(result.next()){
-                customer = new ChinookDAO.Customer(
-                        result.getInt("customer_id"),
-                        result.getString("first_name"),
-                        result.getString("last_name"),
-                        result.getString("country"),
-                        result.getString("postal_code"),
-                        result.getString("phone"),
-                        result.getString("email")
-                );
-            }
+    public int addCustomer(ChinookDAO.Customer object) {
+        String sql = "INSERT INTO customer (\"first_name\",\"last_name\",\"country\",\"postal_code\",\"phone\",\"email\") VALUES(?,?,?,?,?,?)";
+        int numRowsAffected = 0;
 
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, object.firstName());
+            statement.setString(2, object.lastName());
+            statement.setString(3, object.country());
+            statement.setString(4, object.postalCode());
+            statement.setString(5, object.phoneNumber());
+            statement.setString(6, object.email());
+
+            numRowsAffected = statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return customer;
+
+        return numRowsAffected;
     }
 
     @Override

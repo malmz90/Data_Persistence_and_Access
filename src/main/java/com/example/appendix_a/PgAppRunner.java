@@ -17,7 +17,9 @@ public class PgAppRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
       //  System.out.println(customerRepository.findAll());
         //System.out.println("test " + customerRepository.findById(2));
-        System.out.println(customerRepository.findByName("Luis"));
+       // System.out.println(customerRepository.findByName("Luis"));
+        System.out.println(customerRepository.addCustomer(new ChinookDAO.Customer(0,"Alex","Malmqvist","Sweden","425","0707070","bla@f")));
+
     }
 }
 
