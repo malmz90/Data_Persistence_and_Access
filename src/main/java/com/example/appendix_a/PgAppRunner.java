@@ -18,8 +18,9 @@ public class PgAppRunner implements ApplicationRunner {
         //System.out.println(customerRepository.findAll());
         //System.out.println("test " + customerRepository.findById(2));
        //System.out.println(customerRepository.findByName("Leonie"));
-        System.out.println(customerRepository.mostPopularCountry());
+        //System.out.println(customerRepository.mostPopularCountry());
        // System.out.println(customerRepository.getCustomerPage(3,3));
+        System.out.println(customerRepository.customerWithHighestInvoice());
 
     }
 }
