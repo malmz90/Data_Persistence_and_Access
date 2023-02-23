@@ -7,8 +7,8 @@ public interface CRUDRepository<T, U> {
     T findById(U id);
 
     T findByName(String name);
-    int addCustomer(T object);
-    int update(T object);
+    T addCustomer(T object);
+    T updateCustomer(T object);
     int delete(T object);
     int deleteById(U id);
 }
