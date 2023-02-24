@@ -2,12 +2,14 @@ package com.example.appendix_a;
 
 import com.example.appendix_a.Models.Customer;
 import com.example.appendix_a.Models.CustomerCountry;
+import com.example.appendix_a.Models.CustomerGenre;
 import com.example.appendix_a.Models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -75,7 +77,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                         result.getString("email")
                 );
             }
-            System.out.println(customer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,7 +103,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                         result.getString("email")
                 );
             }
-            System.out.println(customer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -233,6 +233,32 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
         return customerSpender;
     }
+
+    @Override
+    public List <CustomerGenre> customerPopularGenre(Customer object) {
+        String sql = "SELECT invoice.customer_id, genre.name, count(genre.name) \n" +
+                "FROM invoice INNER JOIN invoice_line ON invoice_line.invoice_id = invoice.invoice_id\n" +
+                "INNER JOIN track ON invoice_line.track_id = track.track_id\n" +
+                "INNER JOIN genre ON track.genre_id = genre.genre_id\n" +
+                "WHERE invoice.customer_id = ? GROUP BY genre.name, invoice.customer_id\n" +
+                "ORDER BY count(genre.name) DESC FETCH FIRST 1 ROWS WITH TIES";
+       List<CustomerGenre>customerGenres= new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, object.id());
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                CustomerGenre customerGenre = new CustomerGenre(
+                        result.getString("name")
+                );
+                customerGenres.add(customerGenre);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerGenres;
+    }
+
     @Override
     public int delete(Customer object) {
         return 0;
