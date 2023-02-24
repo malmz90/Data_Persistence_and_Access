@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -234,24 +235,28 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public CustomerGenre customerPopularGenre(Customer object) {
-        String sql = "SELECT first_Name FROM customer INNER JOIN invoice ON customer.customer_id = invoice.customer_ID";
-        ;
-        CustomerGenre genre=null;
+    public List <CustomerGenre> customerPopularGenre(Customer object) {
+        String sql = "SELECT invoice.customer_id, genre.name, count(genre.name) \n" +
+                "FROM invoice INNER JOIN invoice_line ON invoice_line.invoice_id = invoice.invoice_id\n" +
+                "INNER JOIN track ON invoice_line.track_id = track.track_id\n" +
+                "INNER JOIN genre ON track.genre_id = genre.genre_id\n" +
+                "WHERE invoice.customer_id = ? GROUP BY genre.name, invoice.customer_id\n" +
+                "ORDER BY count(genre.name) DESC FETCH FIRST 1 ROWS WITH TIES";
+       List<CustomerGenre>customerGenres= new ArrayList<>();
         try(Connection conn = DriverManager.getConnection(url, username,password)) {
-            // Write statement
             PreparedStatement statement = conn.prepareStatement(sql);
-            // Execute statement
+            statement.setInt(1, object.id());
             ResultSet result = statement.executeQuery();
-            if(result.next()) {
-                genre = new CustomerGenre(
-                        result.getString("first_Name")
+            while (result.next()) {
+                CustomerGenre customerGenre = new CustomerGenre(
+                        result.getString("name")
                 );
+                customerGenres.add(customerGenre);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return genre;
+        return customerGenres;
     }
 
     @Override

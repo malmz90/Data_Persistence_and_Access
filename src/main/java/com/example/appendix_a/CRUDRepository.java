@@ -17,6 +17,6 @@ public interface CRUDRepository<T, U> {
     List <T> getCustomerPage (int lim, int offs);
     CustomerCountry mostPopularCountry();
     CustomerSpender customerWithHighestInvoice();
-    CustomerGenre customerPopularGenre(T object);
+    List <CustomerGenre> customerPopularGenre(T object);
 
 }

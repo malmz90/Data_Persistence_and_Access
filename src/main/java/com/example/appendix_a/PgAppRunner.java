@@ -22,7 +22,7 @@ public class PgAppRunner implements ApplicationRunner {
         //System.out.println(customerRepository.mostPopularCountry());
        // System.out.println(customerRepository.getCustomerPage(3,3));
         //System.out.println(customerRepository.customerWithHighestInvoice());
-        System.out.println(customerRepository.customerPopularGenre(customerRepository.findById(4)));
+       // System.out.println(customerRepository.customerPopularGenre(customerRepository.findById(4)));
 
     }
 }
